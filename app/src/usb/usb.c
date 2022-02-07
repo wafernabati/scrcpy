@@ -36,6 +36,7 @@ sc_usb_read_device(libusb_device *device, struct sc_usb_device *out) {
 
     struct libusb_device_descriptor desc;
     int result = libusb_get_device_descriptor(device, &desc);
+    LOGI("USB device %04x:%04x", desc.idVendor, desc.idProduct);
     if (result < 0 || !desc.iSerialNumber) {
         return false;
     }
@@ -43,6 +44,7 @@ sc_usb_read_device(libusb_device *device, struct sc_usb_device *out) {
     libusb_device_handle *handle;
     result = libusb_open(device, &handle);
     if (result < 0) {
+        log_libusb_error((enum libusb_error) result);
         return false;
     }
 
