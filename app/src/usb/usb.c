@@ -147,8 +147,10 @@ sc_usb_devices_log(enum sc_log_level level, struct sc_usb_device *devices,
     for (size_t i = 0; i < count; ++i) {
         struct sc_usb_device *d = &devices[i];
         const char *selection = d->selected ? "-->" : "   ";
-        LOG(level, "    %s %-18s (%04" PRIx16 ":%04" PRIx16 ")  %s %s",
-            selection, d->serial, d->vid, d->pid, d->manufacturer, d->product);
+        // Convert uint16_t to unsigned because PRIx16 may not exist on Windows
+        LOG(level, "    %s %-18s (%04x:%04x)  %s %s",
+            selection, d->serial, (unsigned) d->vid, (unsigned) d->pid,
+            d->manufacturer, d->product);
     }
 }
 
